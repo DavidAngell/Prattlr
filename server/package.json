@@ -1,0 +1,24 @@
+{
+  "name": "prattlr-server",
+  "version": "1.0.0",
+  "description": "Server to handle chat for Prattlr",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc && node ./build/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DavidAngell/Prattlr.git"
+  },
+  "author": "DavidAngell",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DavidAngell/Prattlr/issues"
+  },
+  "homepage": "https://github.com/DavidAngell/Prattlr#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.5.3",
+    "uuid": "^9.0.0"
+  }
+}
