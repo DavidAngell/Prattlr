@@ -15,6 +15,7 @@
       <a href="#about-the-project">About The Project</a>
       <ul>
         <li><a href="#built-with">Built With</a></li>
+        <li><a href="#roadmap">Roadmap</a></li>
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
@@ -29,6 +30,10 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
+
+### Overview 
+
+Prattlr is a multi-chat application that allows streamers to connect with their viewers accross Twitch and YouTube. It is **NOWHERE NEAR** production ready, but it is a work in progress.
 
 <img src="README/chat-preview.png" alt="chat screenshot" width="50%">
 
