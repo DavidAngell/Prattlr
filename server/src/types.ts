@@ -1,7 +1,8 @@
-import { Socket as TempSocket } from 'socket.io';
+import { Socket as TempSocket, Server as TempServer } from 'socket.io';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 
 export type Socket = TempSocket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>;
+export type Server = TempServer<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>;
 export type UUID = string;
 export interface SocketResponse<T> {
 	error: boolean,

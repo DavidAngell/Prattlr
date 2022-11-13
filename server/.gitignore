@@ -2,3 +2,5 @@ build/
 node_modules/
 
 src/credentials.ts
+
+firebase-service.json

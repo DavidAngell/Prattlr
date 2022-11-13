@@ -49,10 +49,11 @@ Prattlr is a multi-chat application that allows streamers to connect with their 
 
 ### Roadmap
 - [x] Create chat front end
+- [x] Create embeded chat for OBS
 - [x] Integrate with Twitch.tv chat
 - [x] Integrate with YouTube chat
 - [ ] Add Firebase authentication
-- [ ] Add Firebase database for chat logs
+- [x] Add Firebase database for chat logs
 - [ ] Add moderation tools
 - [ ] Add chat commands
 - [ ] Add custom emotes
@@ -68,16 +69,29 @@ Prattlr is a multi-chat application that allows streamers to connect with their 
     ```
 
 2. Create server/src/credentials.ts
-    ```ts
+      ```ts
+    // YouTube auth
+    export const YOUTUBE_API = ""
+
+    // Twitch auth
+    const TWITCH_CLIENT_ID = '';
+    const TWITCH_CLIENT_SECRET = '';
     import { ClientCredentialsAuthProvider } from '@twurple/auth';
-
-    export const YOUTUBE_API = "api_key"
-    export const YOUTUBE_CHANNEL_ID = "channel_id"
-
-    const TWITCH_CLIENT_ID = 'client_id';
-    const TWITCH_CLIENT_SECRET = 'client_secret';
-
     export const TWITCH_AUTH_PROVIDER = new ClientCredentialsAuthProvider(TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET);
+
+    // Firebase auth
+    export const FIREBASE_SERVICE_ACCOUNT = {
+      "type": "",
+      "project_id": "",
+      "private_key_id": "",
+      "private_key": "",
+      "client_email": "",
+      "client_id": "",
+      "auth_uri": "",
+      "token_uri": "",
+      "auth_provider_x509_cert_url": "",
+      "client_x509_cert_url": ""
+    };
     ```
 
 3. Start the server

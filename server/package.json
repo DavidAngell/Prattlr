@@ -21,8 +21,9 @@
     "@twurple/auth-ext": "^5.2.7",
     "@twurple/chat": "^5.2.7",
     "express": "^4.18.2",
+    "firebase-admin": "^11.2.1",
     "socket.io": "^4.5.3",
     "uuid": "^9.0.0",
-    "youtube-live-chat": "^1.0.3"
+    "youtube-chat": "^2.1.1"
   }
 }
