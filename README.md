@@ -150,13 +150,13 @@ David Angell - [@DavidJAngell42](https://twitter.com/DavidJAngell42) - contact@d
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/DavidAngell/Viewers-Control.svg?style=for-the-badge
-[contributors-url]: https://github.com/DavidAngell/Viewers-Control/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/DavidAngell/Viewers-Control.svg?style=for-the-badge
-[forks-url]: https://github.com/DavidAngell/Viewers-Control/network/members
-[stars-shield]: https://img.shields.io/github/stars/DavidAngell/Viewers-Control.svg?style=for-the-badge
-[stars-url]: https://github.com/DavidAngell/Viewers-Control/stargazers
-[issues-shield]: https://img.shields.io/github/issues/DavidAngell/Viewers-Control.svg?style=for-the-badge
-[issues-url]: https://github.com/DavidAngell/Viewers-Control/issues
-[license-shield]: https://img.shields.io/github/license/DavidAngell/Viewers-Control.svg?style=for-the-badge
-[license-url]: https://github.com/DavidAngell/Viewers-Control/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/DavidAngell/Prattlr.svg?style=for-the-badge
+[contributors-url]: https://github.com/DavidAngell/Prattlr/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/DavidAngell/Prattlr.svg?style=for-the-badge
+[forks-url]: https://github.com/DavidAngell/Prattlr/network/members
+[stars-shield]: https://img.shields.io/github/stars/DavidAngell/Prattlr.svg?style=for-the-badge
+[stars-url]: https://github.com/DavidAngell/Prattlr/stargazers
+[issues-shield]: https://img.shields.io/github/issues/DavidAngell/Prattlr.svg?style=for-the-badge
+[issues-url]: https://github.com/DavidAngell/Prattlr/issues
+[license-shield]: https://img.shields.io/github/license/DavidAngell/Prattlr.svg?style=for-the-badge
+[license-url]: https://github.com/DavidAngell/Prattlr/blob/master/LICENSE.txt
