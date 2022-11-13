@@ -1,0 +1,21 @@
+.message {
+  /* background-color: var(--background-alt); */
+  padding: 0.25rem 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.message-text {
+  color: var(--text-main);
+  font-size: 1rem;
+}
+
+.message span {
+  margin: 0 0.125rem;
+}
+
+.message img {
+  height: 1rem;
+  margin: 0 0.125rem;
+}

@@ -1,11 +1,16 @@
-import { Socket, SocketResponse } from "../types";
+import { Socket, SocketResponse, Message } from "../types";
 
-export default function chatterHandler(socket: Socket) {
+export default function chatterHandler(socket: Socket, io: any) {
   socket.emit("connection established");
   socket.join("chatter");
 
-  socket.on("get-sessions", (callback: (i: SocketResponse<any>) => void) => {
-    console.log("Getting sessions");
-    callback({ error: false, content: "test" });
+  socket.on("chatter-message", (message, callback: (i: SocketResponse<Message>) => void) => {
+    try {
+      console.log("Chatter message: ", message);
+      io.emit("message", { error: false, content: message } as SocketResponse<Message>);
+      callback({ error: false });
+    } catch (error) {
+      callback({ error: true, content: error });
+    }
   });
 }

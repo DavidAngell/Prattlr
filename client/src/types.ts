@@ -12,7 +12,7 @@ export interface User {
 export interface Message {
   content: string;
   user: User;
-  timestamp: number;
+  timestamp: string;
 }
 
 export interface SocketResponse<T> {

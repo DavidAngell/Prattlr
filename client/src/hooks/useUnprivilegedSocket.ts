@@ -8,10 +8,17 @@ import { Message, SocketResponse } from '../types';
 export interface UseUnprivilegedSocket {
   messages: Message[];
   isLoading: boolean;
+  twitchMessages: Message[];
+  youtubeMessages: Message[];
+  prattlrMessages: Message[];
 }
 
-export default function useUnprivilegedSocket() {
+export default function useUnprivilegedSocket(): UseUnprivilegedSocket {
   const [messages, setMessages] = useState<Message[]>([]);
+  const [twitchMessages, setTwitchMessages] = useState<Message[]>([]);
+  const [youtubeMessages, setYoutubeMessages] = useState<Message[]>([]);
+  const [prattlrMessages, setPrattlrMessages] = useState<Message[]>([]);
+
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -22,9 +29,17 @@ export default function useUnprivilegedSocket() {
 
     socket.on('message', (res: SocketResponse<Message>) => {
       if (res.error) {
-        console.log(res.content);
+        console.log(res.errorContent);
       } else {
         setMessages((messages) => [...messages, res.content]);
+
+        if (res.content.user.fromTwitch) {
+          setTwitchMessages((twitchMessages) => [...twitchMessages, res.content]);
+        } else if (res.content.user.fromYoutube) {
+          setYoutubeMessages((youtubeMessages) => [...youtubeMessages, res.content]);
+        } else if (res.content.user.fromPrattlr) {
+          setPrattlrMessages((prattlrMessages) => [...prattlrMessages, res.content]);
+        }
       }
     });
 
@@ -34,5 +49,11 @@ export default function useUnprivilegedSocket() {
     }
   }, [socket]);
 
-  return { messages, isLoading };
+  return { 
+    messages, 
+    isLoading,
+    twitchMessages,
+    youtubeMessages,
+    prattlrMessages
+  };
 }

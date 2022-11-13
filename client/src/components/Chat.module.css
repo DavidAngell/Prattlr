@@ -1,0 +1,31 @@
+.chat {
+  margin: 0;
+  padding: 0;
+}
+
+.chat-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  background-color: var(--background-alt);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.chat-tab {
+  padding: 0.5rem 2rem;
+  background-color: var(--background-alt);
+  transition: all 0.1s ease-in;
+}
+
+.chat-tab:hover {
+  cursor: pointer;
+  background-color: var(--background);
+}
+
+.chat-tab-focused {
+  background-color: var(--background);
+  color: var(--text-main);
+  padding: 0.5rem 2rem;
+}
