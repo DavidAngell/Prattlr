@@ -41,6 +41,16 @@
 * [Socket.IO](https://socket.io/)
 * [twurple](https://twurple.js.org/)
 
+### Roadmap
+- [x] Create chat front end
+- [x] Integrate with Twitch.tv chat
+- [x] Integrate with YouTube chat
+- [ ] Add Firebase authentication
+- [ ] Add Firebase database for chat logs
+- [ ] Add moderation tools
+- [ ] Add chat commands
+- [ ] Add custom emotes
+
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
