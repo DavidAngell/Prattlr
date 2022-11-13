@@ -17,9 +17,7 @@
         <li><a href="#built-with">Built With</a></li>
       </ul>
     </li>
-    <li>
-      <a href="#usage">Usage</a>
-    </li>
+    <li><a href="#usage">Usage</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -32,10 +30,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-<div>
-  <img src="README/chat-preview.png" alt="chat screenshot" width="50%">
-
-</div>
+<img src="README/chat-preview.png" alt="chat screenshot" width="50%">
 
 ### Built With
 
@@ -57,15 +52,15 @@
 
 2. Start the server
 	```bash
-  cd server
+	cd server
 	npm run start
 	```
-3. Start the client
-  ```bash
-  cd client
-  npm run dev
-	```
 
+3. Start the client
+	```bash
+	cd client
+	npm run dev
+	```
 4. Open [http://localhost:3000](http://localhost:3000) in your browser of choice
 
 <p align="right">(<a href="#top">back to top</a>)</p>
