@@ -39,29 +39,43 @@
 * [React](https://reactjs.org/)
 * [Firebase](https://firebase.google.com/)
 * [Socket.IO](https://socket.io/)
+* [twurple](https://twurple.js.org/)
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Usage
 1. Clone the repo
-	```bash
-	git clone https://github.com/DavidAngell/Prattlr
-	cd Prattlr
-	```
+    ```bash
+    git clone https://github.com/DavidAngell/Prattlr
+    cd Prattlr
+    ```
 
-2. Start the server
-	```bash
-	cd server
-	npm run start
-	```
+2. Create server/src/credentials.ts
+    ```ts
+    import { ClientCredentialsAuthProvider } from '@twurple/auth';
 
-3. Start the client
-	```bash
-	cd client
-	npm run dev
-	```
-4. Open [http://localhost:3000](http://localhost:3000) in your browser of choice
+    export const YOUTUBE_API = "api_key"
+    export const YOUTUBE_CHANNEL_ID = "channel_id"
+
+    const TWITCH_CLIENT_ID = 'client_id';
+    const TWITCH_CLIENT_SECRET = 'client_secret';
+
+    export const TWITCH_AUTH_PROVIDER = new ClientCredentialsAuthProvider(TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET);
+    ```
+
+3. Start the server
+    ```bash
+    cd server
+    npm run start
+    ```
+
+4. Start the client
+    ```bash
+    cd client
+    npm run dev
+    ```
+5. Open [http://localhost:3000](http://localhost:3000) in your browser of choice
 
 <p align="right">(<a href="#top">back to top</a>)</p>
     
