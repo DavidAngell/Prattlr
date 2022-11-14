@@ -18,6 +18,7 @@ const loadingMessage: Message = {
 
 interface ChatBlockProps {
 	hideTabs?: true;
+	forceScroll?: boolean;
 }
 
 enum ChatTab {
@@ -27,7 +28,7 @@ enum ChatTab {
 	YouTube,
 }
 
-export default function Chat({ hideTabs }: ChatBlockProps) {
+export default function Chat({ hideTabs, forceScroll }: ChatBlockProps) {
 	const { 
 		messages, 
 		isLoading,
@@ -70,7 +71,7 @@ export default function Chat({ hideTabs }: ChatBlockProps) {
 			{
 				(isLoading) 
 					? <MessageList messages={[loadingMessage]} />
-					: <MessageList messages={
+					: <MessageList forceScroll={forceScroll} messages={
 							(() => {
 								switch (tab) {
 									case ChatTab.All:

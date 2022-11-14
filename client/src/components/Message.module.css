@@ -2,10 +2,10 @@
   /* background-color: var(--background-alt); */
   padding: 0.25rem 0.5rem;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   max-width: 100%;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 .message-text {

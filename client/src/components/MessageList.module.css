@@ -1,7 +1,16 @@
 .message-list {
   background-color: var(--background);
   color: var(--text-main);
-  height: calc(100vh - 3rem - 3rem - 0.5rem);
+  height: calc(100vh - 3rem - 3rem);
   overflow-y: scroll;
   padding-top: 3rem;
+}
+
+.message-list * {
+  overflow-anchor: none;
+}
+
+#anchor {
+  overflow-anchor: auto !important;
+  height: 0.5rem;
 }

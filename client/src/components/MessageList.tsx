@@ -6,18 +6,20 @@ import styles from "./MessageList.module.css";
 interface MessageListProps {
   messages: MessageType[];
   showTimestamps?: false;
+  forceScroll?: boolean;
 }
 
-export default function MessageList({ messages, showTimestamps }: MessageListProps) {
-  const ref = useChatScroll(messages)
+export default function MessageList({ messages, showTimestamps, forceScroll }: MessageListProps) {
+  const ref = useChatScroll(messages);
   
   return <>
-    <div ref={ref} className={styles["message-list"]}>
+    <div ref={(forceScroll) ? ref : null} className={styles["message-list"]}>
       {
         messages.map((message, index) => {
           return <Message key={index} message={message} />
         })
       }
+      <div id={styles["anchor"]}></div>
     </div>
   </>
 }
