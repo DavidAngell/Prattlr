@@ -54,8 +54,12 @@ Prattlr is a multi-chat application that allows streamers to connect with their 
 - [x] Integrate with YouTube chat
 - [x] Add Firebase authentication
 - [x] Add Firebase database for chat logs
+- [ ] Add logs viewer
 - [ ] Add moderation tools
+- [ ] Add chat badges and name colors
+- [ ] Add custom handles
 - [ ] Add chat commands
+- [ ] Get BetterTTV and FrankerFaceZ emotes working
 - [ ] Add custom emotes
 
 
@@ -70,15 +74,6 @@ Prattlr is a multi-chat application that allows streamers to connect with their 
 
 2. Create server/src/credentials.ts
       ```ts
-    // YouTube auth
-    export const YOUTUBE_API = ""
-
-    // Twitch auth
-    const TWITCH_CLIENT_ID = '';
-    const TWITCH_CLIENT_SECRET = '';
-    import { ClientCredentialsAuthProvider } from '@twurple/auth';
-    export const TWITCH_AUTH_PROVIDER = new ClientCredentialsAuthProvider(TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET);
-
     // Firebase auth
     export const FIREBASE_SERVICE_ACCOUNT = {
       "type": "",

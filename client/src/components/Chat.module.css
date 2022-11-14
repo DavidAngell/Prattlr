@@ -16,9 +16,9 @@
 .chat-tab {
   padding: 0.5rem 2rem;
   background-color: var(--background-alt);
-  transition: all 0.1s ease-in;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  transition: all 0.15s ease-in;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
   margin-right: 5px;
 }
 
@@ -31,4 +31,6 @@
   background-color: var(--background);
   color: var(--text-main);
   padding: 0.5rem 2rem;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
 }
