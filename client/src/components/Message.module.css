@@ -6,6 +6,12 @@
   align-items: center;
   max-width: 100%;
   overflow: hidden;
+  transition: all 0.15s ease-in;
+}
+
+.message:hover {
+  cursor: pointer;
+  background-color: var(--background-alt);
 }
 
 .message-text {
@@ -20,4 +26,16 @@
 .message img {
   height: 1rem;
   margin: 0 0.125rem;
+}
+
+.youtube {
+  color: var(--youtube) !important;
+}
+
+.twitch {
+  color: var(--twitch) !important;
+}
+
+.prattlr {
+  color: var(--theme-main) !important;
 }

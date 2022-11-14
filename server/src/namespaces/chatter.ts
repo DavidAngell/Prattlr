@@ -1,4 +1,5 @@
 import { Socket, SocketResponse, Message } from "../types";
+const { getAuth } = require('firebase-admin/auth');
 
 export default function chatterHandler(socket: Socket, io: any, db: any) {
   socket.emit("connection established");
@@ -6,16 +7,27 @@ export default function chatterHandler(socket: Socket, io: any, db: any) {
 
   socket.on("chatter-message", async (message, callback: (i: SocketResponse<Message>) => void) => {
     try {
-      console.log("Chatter message: ", message);
+      // Ensure the user has a valid
+      const { accessToken } = socket.handshake.auth;
+      if (!accessToken) {
+        throw new Error("No access token provided");
+      }
+
+      // Ensure the user exists in the database
+      const decodedToken = await getAuth().verifyIdToken(accessToken);
+      if (!decodedToken) {
+        throw new Error("User does not exist");
+      }
 
       // Save message to database
-      const userRef = db.collection("prattlr-users").doc(message.user.id);
+      const userRef = db.collection("prattlr-users").doc(decodedToken.uid);
       const doc = await userRef.get()
       const docExists = doc.exists;
 
       if (!docExists) {
         await userRef.set({
-          id: message.user.id,
+          id: decodedToken.uid,
+          authToken: accessToken,
           name: message.user.name,
           pfp: message.user.pfp,
           fromTwitch: false,

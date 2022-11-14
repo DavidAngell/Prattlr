@@ -56,7 +56,7 @@ Prattlr is a multi-chat application that allows streamers to connect with their 
 - [x] Add Firebase database for chat logs
 - [ ] Add logs viewer
 - [ ] Add moderation tools
-- [ ] Add chat badges and name colors
+- [x] Add chat badges and name colors
 - [ ] Add custom handles
 - [ ] Add chat commands
 - [ ] Get BetterTTV and FrankerFaceZ emotes working

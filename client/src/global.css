@@ -5,6 +5,9 @@
   --background-alt: rgb(65, 65, 65);
   --theme-main: rgb(49, 65, 156);
   --theme-secondary: rgb(72, 90, 190);
+
+  --youtube: rgb(207, 49, 49);
+  --twitch: rgb(100, 65, 165);
 }
 html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
