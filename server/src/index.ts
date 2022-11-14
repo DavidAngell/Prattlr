@@ -14,7 +14,7 @@ const CHANNEL_LIST = {
 		// "UC554eY5jNUfDq3yDOJYirOQ"
 	],
 	twitch: [
-		'xqc',
+		// 'xqc',
 	]
 }
 
@@ -34,8 +34,9 @@ const io = new Server(server, {
 });
 
 // Initialize Firebase Admin
-const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
-const { getFirestore, Timestamp, FieldValue } = require('firebase-admin/firestore');
+const { initializeApp, cert } = require('firebase-admin/app');
+const { getFirestore } = require('firebase-admin/firestore');
+const { getAuth } = require('firebase-admin/auth');
 
 initializeApp({
 	credential: cert(FIREBASE_SERVICE_ACCOUNT),
@@ -66,9 +67,48 @@ modNamespace.use((socket, next) => {
 
 // Create the chatter namespace
 const chatterNamespace = io.of("/chatter");
-chatterNamespace.use((socket, next) => {
-	// ensure the user has sufficient rights
-	next();
+chatterNamespace.use(async (socket, next) => {
+	try {
+		// Ensure the user has a valid
+		console.log("Chatter request: ");
+		console.log(socket.handshake.auth);
+		const { accessToken } = socket.handshake.auth;
+		if (!accessToken) {
+			throw new Error("No access token provided");
+		}
+
+		// Ensure the user exists in the database
+		const authToken = await getAuth().verifyIdToken(accessToken);
+
+		if (!authToken) {
+			throw new Error("User does not exist");
+		}
+
+		console.log(authToken)
+
+		// Ensure the user is not banned
+		// const { banned } = doc.data();
+		// if (banned) {
+		// 	throw new Error("User is banned");
+		// }
+
+		// Ensure the user is not muted
+		// const { muted } = doc.data();
+		// if (muted) {
+		// 	throw new Error("User is muted");
+		// }
+
+		// Ensure the user is not timed out
+		// const { timeout } = doc.data();
+		// if (timeout) {
+		// 	throw new Error("User is timed out");
+		// }
+
+		next();
+	} catch (error) {
+		console.log(error);
+		next(new Error(error));
+	}
 });
 
 // Handle the connection event for the admin namespace

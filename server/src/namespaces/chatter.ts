@@ -35,6 +35,7 @@ export default function chatterHandler(socket: Socket, io: any, db: any) {
       io.emit("message", { error: false, content: message } as SocketResponse<Message>);
       callback({ error: false });
     } catch (error) {
+      console.log(error);
       callback({ error: true, content: error });
     }
   });

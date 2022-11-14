@@ -12,6 +12,7 @@ export interface SocketResponse<T> {
 
 export interface User {
   id: string;
+	accessToken: string;
   name: string;
   pfp: string;
   fromTwitch: boolean;

@@ -14,6 +14,7 @@ export default function startTwitchChat(io: Server, db: any, channelName: string
 
       const userObj: User = {
           id: null,
+          accessToken: "twitch",
           name: user,
           pfp: null,
           fromTwitch: true,
@@ -37,6 +38,7 @@ export default function startTwitchChat(io: Server, db: any, channelName: string
       if (!docExists) {
         await userRef.set({
           id: userObj.id,
+          accessToken: "twitch",
           name: userObj.name,
           pfp: userObj.pfp,
           fromTwitch: userObj.fromTwitch,

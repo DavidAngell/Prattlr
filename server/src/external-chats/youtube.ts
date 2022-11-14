@@ -14,6 +14,7 @@ export default function startYouTubeChat(io: Server, db: any, chatId: string) {
   liveChat.on("chat", async (chatItem) => {
     const user: User = {
       id: chatItem.author.channelId,
+      accessToken: "youtube",
       name: chatItem.author.name,
       pfp: chatItem.author.thumbnail.url,
       fromTwitch: false,
@@ -45,6 +46,7 @@ export default function startYouTubeChat(io: Server, db: any, chatId: string) {
     if (!docExists) {
       await userRef.set({
         id: user.id,
+        accessToken: "youtube",
         name: user.name,
         pfp: user.pfp,
         fromTwitch: false,

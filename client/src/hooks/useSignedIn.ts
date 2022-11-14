@@ -30,9 +30,10 @@ export default function useSignedIn(): UseSignedIn {
 	useEffect(() => {
 		if (localStorage) {
 			const storedUser = JSON.parse(localStorage.getItem('user'));
-			if (storedUser) {
+			if (storedUser && storedUser.stsTokenManager.accessToken) {
 				setUser({
 					id: storedUser.uid,
+          accessToken: storedUser.stsTokenManager.accessToken,
 					name: storedUser.displayName,
 					pfp: storedUser.photoURL,
 					fromTwitch: false,
@@ -41,6 +42,7 @@ export default function useSignedIn(): UseSignedIn {
 					isMod: false,
 					isAdmin: false,
 				})
+
 			}
 		}
 	}, [localStorage]);
@@ -62,8 +64,7 @@ export default function useSignedIn(): UseSignedIn {
     signIn: () => {
       const auth = getAuth();
       signInWithPopup(auth, provider)
-        .then((result) => {
-          // result.user.getIdToken().then((token) => {
+        .then(async (result) => {
           localStorage.setItem("user", JSON.stringify(result.user));
           window.location.reload();
         }).catch((error) => {

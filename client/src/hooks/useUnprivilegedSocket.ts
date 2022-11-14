@@ -40,6 +40,8 @@ export default function useUnprivilegedSocket(): UseUnprivilegedSocket {
         } else if (res.content.user.fromPrattlr) {
           setPrattlrMessages((prattlrMessages) => [...prattlrMessages, res.content]);
         }
+
+        setIsLoading(false);
       }
     });
 
