@@ -36,7 +36,7 @@
 
 Prattlr is a multi-chat application that allows streamers to connect with their viewers accross Twitch and YouTube. It is **NOWHERE NEAR** production ready, but it is a work in progress.
 
-<img src="README/chat-preview.png" alt="chat screenshot" width="50%">
+<img src="README/chat-preview.png" alt="chat screenshot" width="70%">
 
 ### Built With
 
