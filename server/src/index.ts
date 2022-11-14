@@ -11,10 +11,10 @@ import {
 // Channels to join chat for
 const CHANNEL_LIST = {
 	youtube: [
-		"UC554eY5jNUfDq3yDOJYirOQ"
+		// "UC554eY5jNUfDq3yDOJYirOQ"
 	],
 	twitch: [
-		'channel1',
+		'xqc',
 	]
 }
 

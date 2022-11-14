@@ -13,9 +13,9 @@ export default function startTwitchChat(io: Server, db: any, channelName: string
       })
 
       const userObj: User = {
-          id: "test",
+          id: null,
           name: user,
-          pfp: "test",
+          pfp: null,
           fromTwitch: true,
           fromYoutube: false,
           fromPrattlr: false,

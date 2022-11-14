@@ -52,7 +52,7 @@ Prattlr is a multi-chat application that allows streamers to connect with their 
 - [x] Create embeded chat for OBS
 - [x] Integrate with Twitch.tv chat
 - [x] Integrate with YouTube chat
-- [ ] Add Firebase authentication
+- [x] Add Firebase authentication
 - [x] Add Firebase database for chat logs
 - [ ] Add moderation tools
 - [ ] Add chat commands

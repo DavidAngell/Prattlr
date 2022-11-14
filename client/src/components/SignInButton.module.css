@@ -1,0 +1,9 @@
+.sign-in-out-button {
+  background-color: var(--theme-main);
+  border: 3px solid var(--background-alt);
+  border-radius: 10px;
+  color: var(--text-main);
+  padding: 0.5rem 1rem;
+  position: fixed;
+  right: 0;
+}

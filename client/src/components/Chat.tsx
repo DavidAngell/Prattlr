@@ -4,6 +4,8 @@ import MessageList from "./MessageList";
 import styles from "./Chat.module.css";
 import { Message, User } from "../types";
 import { useEffect, useState } from "react";
+import useSignedIn from "@hooks/useSignedIn";
+import SignInButton from "./SignInButton";
 
 const loadingMessage: Message = {
 	user: {
@@ -15,7 +17,6 @@ const loadingMessage: Message = {
 }
 
 interface ChatBlockProps {
-	user?: User;
 	hideTabs?: true;
 }
 
@@ -26,7 +27,7 @@ enum ChatTab {
 	YouTube,
 }
 
-export default function Chat({ user, hideTabs }: ChatBlockProps) {
+export default function Chat({ hideTabs }: ChatBlockProps) {
 	const { 
 		messages, 
 		isLoading,
@@ -36,6 +37,7 @@ export default function Chat({ user, hideTabs }: ChatBlockProps) {
 	} = useUnprivilegedSocket();
 
 	const [tab, setTab] = useState(ChatTab.All);
+	const { user, loggedIn } = useSignedIn();
 
 	return <>
 		{
@@ -61,6 +63,7 @@ export default function Chat({ user, hideTabs }: ChatBlockProps) {
 					onClick={() => setTab(ChatTab.YouTube)}>
 					YouTube
 				</div>
+				<SignInButton />
 			</div>
 		}
 		<div className={styles["chat"]}>
@@ -84,7 +87,7 @@ export default function Chat({ user, hideTabs }: ChatBlockProps) {
 			}
 
 			{
-				(user) ? <ChatInput user={user} /> : <div>Log in to chat</div>
+				(loggedIn) && <ChatInput user={user} /> 
 			}
 		</div>
 	</>

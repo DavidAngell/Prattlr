@@ -1,23 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Chat from '@components/Chat';
-import { User } from '../types';
-
-const tempUser: User = {
-	id: "jsajkndaskjskjn",
-  name: "John Doe",
-	pfp: "https://avatars.githubusercontent.com/u/86369915?v=4",
-	fromTwitch: false,
-	fromYoutube: false,
-	fromPrattlr: true,
-	isMod: false,
-  isAdmin: false,
-}
 ---
 
 <Layout title="Chat">
 	<main>
-		<Chat user={tempUser} client:load />
+		<Chat client:load />
 	</main>
 </Layout>
 
