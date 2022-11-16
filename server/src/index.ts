@@ -112,24 +112,6 @@ chatterNamespace.use(async (socket, next) => {
 			throw new Error("User does not exist");
 		}
 
-		// Ensure the user is not banned
-		// const { banned } = doc.data();
-		// if (banned) {
-		// 	throw new Error("User is banned");
-		// }
-
-		// Ensure the user is not muted
-		// const { muted } = doc.data();
-		// if (muted) {
-		// 	throw new Error("User is muted");
-		// }
-
-		// Ensure the user is not timed out
-		// const { timeout } = doc.data();
-		// if (timeout) {
-		// 	throw new Error("User is timed out");
-		// }
-
 		next();
 	} catch (error) {
 		console.log(error);

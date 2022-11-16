@@ -24,6 +24,7 @@
     "firebase-admin": "^11.2.1",
     "socket.io": "^4.5.3",
     "uuid": "^9.0.0",
-    "youtube-chat": "^2.1.1"
+    "youtube-chat": "^2.1.1",
+    "zod": "^3.19.1"
   }
 }

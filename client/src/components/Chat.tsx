@@ -13,7 +13,7 @@ const loadingMessage: Message = {
 		name: "",
 	} as User,
 	content: "Loading...",
-	timestamp: "Loading..."
+	timestamp: (new Date()).toUTCString(),
 }
 
 interface ChatBlockProps {

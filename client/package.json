@@ -19,6 +19,7 @@
     "astro-icon": "^0.8.0",
     "classnames": "^2.3.2",
     "firebase": "^9.14.0",
-    "socket.io-client": "^4.5.3"
+    "socket.io-client": "^4.5.3",
+    "zod": "^3.19.1"
   }
 }

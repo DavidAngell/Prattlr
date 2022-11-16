@@ -1,123 +1,37 @@
 import { Socket as TempSocket, Server as TempServer } from 'socket.io';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
+import { z } from 'zod';
 
 export type Socket = TempSocket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>;
 export type Server = TempServer<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>;
 export type UUID = string;
-export interface SocketResponse<T> {
-	error: boolean,
-	errorContent?: string,
-	content?: T
-}
 
-export interface User {
-  id: string;
-	accessToken: string;
-  name: string;
-  pfp: string;
-  fromTwitch: boolean;
-  fromYoutube: boolean;
-  fromPrattlr: boolean;
-  isMod: boolean;
-  isAdmin: boolean;
-}
+export const SocketResponseSchema = z.object({
+  error: z.boolean(),
+  errorContent: z.string().optional(),
+  content: z.any().optional()
+});
 
-export interface Message {
-  content: string;
-  user: User;
-  timestamp: string;
-}
+export type SocketResponse<T> = z.infer<typeof SocketResponseSchema>;
 
-export interface YouTubeChatMessage {
-  kind: string,
-  etag: any,
-  id: string,
-  snippet: {
-    type: string,
-    liveChatId: string,
-    authorChannelId: string,
-    publishedAt: any,
-    hasDisplayContent: boolean,
-    displayMessage: string,
-    fanFundingEventDetails: {
-      amountMicros: number,
-      currency: string,
-      amountDisplayString: string,
-      userComment: string
-    },
+export const UserScheme = z.object({
+  id: z.string(),
+  accessToken: z.string(),
+  name: z.string(),
+  pfp: z.string(),
+  fromTwitch: z.boolean(),
+  fromYoutube: z.boolean(),
+  fromPrattlr: z.boolean(),
+  isMod: z.boolean(),
+  isAdmin: z.boolean(),
+});
 
-    textMessageDetails: {
-      messageText: string
-    },
+export type User = z.infer<typeof UserScheme>;
 
-    messageDeletedDetails: {
-      deletedMessageId: string
-    },
+export const MessageScheme = z.object({
+  content: z.string(),
+  user: UserScheme,
+  timestamp: z.string(),
+});
 
-    userBannedDetails: {
-      bannedUserDetails: {
-        channelId: string,
-        channelUrl: string,
-        displayName: string,
-        profileImageUrl: string
-      },
-
-      banType: string,
-      banDurationSeconds: number
-    },
-		
-    memberMilestoneChatDetails: {
-      userComment: string,
-      memberMonth: number,
-      memberLevelName: string
-    },
-
-    newSponsorDetails: {
-      memberLevelName: string,
-      isUpgrade: boolean
-    },
-
-    superChatDetails: {
-      amountMicros: number,
-      currency: string,
-      amountDisplayString: string,
-      userComment: string,
-      tier: number
-    },
-
-    superStickerDetails: {
-      superStickerMetadata: {
-        stickerId: string,
-        altText: string,
-        language: string
-      },
-
-      amountMicros: number,
-      currency: string,
-      amountDisplayString: string,
-      tier: number
-    },
-
-    membershipGiftingDetails: {
-      giftMembershipsCount: number,
-      giftMembershipsLevelName: string
-    },
-
-    giftMembershipReceivedDetails: {
-      memberLevelName: string,
-      gifterChannelId: string,
-      associatedMembershipGiftingMessageId: string
-    }
-  },
-
-  authorDetails: {
-    channelId: string,
-    channelUrl: string,
-    displayName: string,
-    profileImageUrl: string,
-    isVerified: boolean,
-    isChatOwner: boolean,
-    isChatSponsor: boolean,
-    isChatModerator: boolean
-  }
-}
+export type Message = z.infer<typeof MessageScheme>;

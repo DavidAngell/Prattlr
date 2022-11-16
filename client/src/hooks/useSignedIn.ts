@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { User } from 'src/types';
+import { User, FirebaseUserScheme } from 'src/types';
 
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
@@ -28,23 +28,29 @@ export default function useSignedIn(): UseSignedIn {
   // Get user from local storage
 	const [user, setUser] = useState<User | null>(null);
 	useEffect(() => {
-		if (localStorage) {
-			const storedUser = JSON.parse(localStorage.getItem('user'));
-			if (storedUser && storedUser.stsTokenManager.accessToken) {
-				setUser({
-					id: storedUser.uid,
-          accessToken: storedUser.stsTokenManager.accessToken,
-					name: storedUser.displayName,
-					pfp: storedUser.photoURL,
-					fromTwitch: false,
-					fromYoutube: false,
-					fromPrattlr: true,
-					isMod: false,
-					isAdmin: false,
-				})
+    try {
+      if (localStorage) {
+        const storedUser = JSON.parse(localStorage.getItem('user'));
+        if (!storedUser) {
+          return;
+        }
 
-			}
-		}
+        const validatedUser = FirebaseUserScheme.parse(storedUser);
+        setUser({
+          id: validatedUser.uid,
+          accessToken: validatedUser.stsTokenManager.accessToken,
+          name: validatedUser.displayName,
+          pfp: validatedUser.photoURL,
+          fromTwitch: false,
+          fromYoutube: false,
+          fromPrattlr: true,
+          isMod: false,
+          isAdmin: false,
+        })
+      }
+    } catch (error) {
+      console.log(error);
+    }
 	}, [localStorage]);
 
   return {
@@ -65,7 +71,8 @@ export default function useSignedIn(): UseSignedIn {
       const auth = getAuth();
       signInWithPopup(auth, provider)
         .then(async (result) => {
-          localStorage.setItem("user", JSON.stringify(result.user));
+          const validatedUser = FirebaseUserScheme.parse(result.user);
+          localStorage.setItem("user", JSON.stringify(validatedUser));
           window.location.reload();
         }).catch((error) => {
           const errorCode = error.code;

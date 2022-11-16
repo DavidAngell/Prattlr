@@ -1,4 +1,4 @@
-import { Socket, SocketResponse, Message } from "../types";
+import { Socket, SocketResponse, Message, MessageScheme } from "../types";
 const { getAuth } = require('firebase-admin/auth');
 
 interface ValidateUser {
@@ -55,6 +55,8 @@ export default function modHandler(socket: Socket, io: any, db: any) {
 
   socket.on("moderator-message", async (message, callback: (i: SocketResponse<Message>) => void) => {
     try {
+      // Validate message
+      const validatedMessage = MessageScheme.parse(message);
 
       // Validate the user
       const { 
@@ -70,11 +72,11 @@ export default function modHandler(socket: Socket, io: any, db: any) {
 
       // Save message to database
       await userRef.update({
-        logs: [...doc.data().logs, message],
+        logs: [...doc.data().logs, validatedMessage],
       });
 
       // Send message to all clients
-      io.emit("message", { error: false, content: message } as SocketResponse<Message>);
+      io.emit("message", { error: false, content: validatedMessage } as SocketResponse<Message>);
       callback({ error: false });
     } catch (error) {
       console.log(error);

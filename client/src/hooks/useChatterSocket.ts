@@ -1,17 +1,19 @@
 import { io } from 'socket.io-client'
 import { SOCKET_URL } from 'src/globals';
 import { useEffect, useState } from 'react';
-import { Message, SocketResponse, User } from '../types';
+import { Message, SocketResponse, User, UserScheme } from '../types';
 
 export interface UseChatterSocket {
-  sendMessage: (message: string) => void;
+  success: boolean;
+  sendMessage?: (message: string) => void;
 }
 
 export default function useChatterSocket(user: User): UseChatterSocket {
+  const { success } = UserScheme.safeParse(user);
   const [socket, setSocket] = useState<any>(null);
 
   useEffect(() => {
-    if (user) {
+    if (success) {
       console.log(user.accessToken)
       const socket = io(SOCKET_URL + '/chatter', {
         auth: {
@@ -22,20 +24,25 @@ export default function useChatterSocket(user: User): UseChatterSocket {
     }
   }, [user]);
 
-  return { 
-    sendMessage: (message: string) => {
-      socket.emit('chatter-message', 
-        { 
-          content: message, 
-          user, 
-          timestamp: (new Date()).toISOString()
-        } as Message, 
-
-        (res: SocketResponse<any>) => {
-          if (res.error) {
-            console.log(res.errorContent);
-          }
-        });
-    }
-   };
+  if (success) {
+    return {
+      success: true,
+      sendMessage: (message: string) => {
+        socket.emit('chatter-message', 
+          { 
+            content: message, 
+            user, 
+            timestamp: new Date().toUTCString()
+          } as Message, 
+  
+          (res: SocketResponse<any>) => {
+            if (res.error) {
+              console.log(res.errorContent);
+            }
+          });
+      }
+     };
+  } else {
+    return { success: false };
+  }
 }

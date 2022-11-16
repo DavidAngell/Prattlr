@@ -1,4 +1,4 @@
-import { Socket, SocketResponse, Message } from "../types";
+import { Socket, SocketResponse, Message, MessageScheme } from "../types";
 const { getAuth } = require('firebase-admin/auth');
 
 export default function chatterHandler(socket: Socket, io: any, db: any) {
@@ -7,6 +7,9 @@ export default function chatterHandler(socket: Socket, io: any, db: any) {
 
   socket.on("chatter-message", async (message, callback: (i: SocketResponse<Message>) => void) => {
     try {
+      // Validate message
+      const validatedMessage = MessageScheme.parse(message);
+
       // Ensure the user has a valid
       const { accessToken } = socket.handshake.auth;
       if (!accessToken) {
@@ -28,23 +31,23 @@ export default function chatterHandler(socket: Socket, io: any, db: any) {
         await userRef.set({
           id: decodedToken.uid,
           authToken: accessToken,
-          name: message.user.name,
-          pfp: message.user.pfp,
+          name: validatedMessage.user.name,
+          pfp: validatedMessage.user.pfp,
           fromTwitch: false,
           fromYoutube: false,
           fromPrattlr: true,
           isMod: false,
           isAdmin: false,
-          logs: [message],
+          logs: [validatedMessage],
         });
       } else {
         await userRef.update({
-          logs: [...doc.data().logs, message],
+          logs: [...doc.data().logs, validatedMessage],
         });
       }
 
       // Send message to all clients
-      io.emit("message", { error: false, content: message } as SocketResponse<Message>);
+      io.emit("message", { error: false, content: validatedMessage } as SocketResponse<Message>);
       callback({ error: false });
     } catch (error) {
       console.log(error);

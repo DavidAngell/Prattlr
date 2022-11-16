@@ -3,7 +3,8 @@ import { SOCKET_URL } from 'src/globals';
 const socket = io(SOCKET_URL);
 
 import { useEffect, useState } from 'react';
-import { Message, SocketResponse } from '../types';
+import { Message, SocketResponse, MessageScheme, SocketResponseSchema } from '../types';
+import { validateConfig } from 'astro/dist/core/config';
 
 export interface UseUnprivilegedSocket {
   messages: Message[];
@@ -28,20 +29,26 @@ export default function useUnprivilegedSocket(): UseUnprivilegedSocket {
     });
 
     socket.on('message', (res: SocketResponse<Message>) => {
-      if (res.error) {
-        console.log(res.errorContent);
-      } else {
-        setMessages((messages) => [...messages, res.content]);
+      try {
+        const validatedResponse = SocketResponseSchema.parse(res);
+        if (res.error) throw new Error(validatedResponse.errorContent);
+        
+        const validatedMessage = MessageScheme.parse(res.content);
 
-        if (res.content.user.fromTwitch) {
-          setTwitchMessages((twitchMessages) => [...twitchMessages, res.content]);
-        } else if (res.content.user.fromYoutube) {
-          setYoutubeMessages((youtubeMessages) => [...youtubeMessages, res.content]);
-        } else if (res.content.user.fromPrattlr) {
-          setPrattlrMessages((prattlrMessages) => [...prattlrMessages, res.content]);
+        setMessages((messages) => [...messages, validatedMessage]);
+
+        if (validatedMessage.user.fromTwitch) {
+          setTwitchMessages((twitchMessages) => [...twitchMessages, validatedMessage]);
+        } else if (validatedMessage.user.fromYoutube) {
+          setYoutubeMessages((youtubeMessages) => [...youtubeMessages, validatedMessage]);
+        } else if (validatedMessage.user.fromPrattlr) {
+          setPrattlrMessages((prattlrMessages) => [...prattlrMessages, validatedMessage]);
         }
 
         setIsLoading(false);
+  
+      } catch (error) {
+        console.log(error);
       }
     });
 
