@@ -18,7 +18,7 @@ export const UserScheme = z.object({
   id: z.string(),
   accessToken: z.string(),
   name: z.string(),
-  pfp: z.string(),
+  pfp: z.string().url(),
   fromTwitch: z.boolean(),
   fromYoutube: z.boolean(),
   fromPrattlr: z.boolean(),
@@ -32,6 +32,10 @@ export const MessageScheme = z.object({
   content: z.string(),
   user: UserScheme,
   timestamp: z.string(),
+
+  // timestamp: z.preprocess((arg) => {
+  //   if (typeof arg == "string" || arg instanceof Date) return new Date(arg);
+  // }, z.date())
 });
 
 export type Message = z.infer<typeof MessageScheme>;

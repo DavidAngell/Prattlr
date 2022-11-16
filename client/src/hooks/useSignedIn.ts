@@ -30,12 +30,14 @@ export default function useSignedIn(): UseSignedIn {
 	useEffect(() => {
     try {
       if (localStorage) {
+        // Get user from local storage
         const storedUser = JSON.parse(localStorage.getItem('user'));
-        if (!storedUser) {
-          return;
-        }
+        if (!storedUser) return;
 
+        // Validate user
         const validatedUser = FirebaseUserScheme.parse(storedUser);
+
+        // Set user if valid
         setUser({
           id: validatedUser.uid,
           accessToken: validatedUser.stsTokenManager.accessToken,
@@ -58,27 +60,31 @@ export default function useSignedIn(): UseSignedIn {
     user,
     signOut: () => {
       const auth = getAuth();
-      signOut(auth)
-        .then(() => {
-          localStorage.removeItem('user');
-          window.location.reload();
-          console.log("Signed out");
-        }).catch((error) => {
-          console.log(error);
-        });
+      signOut(auth).then(() => {
+        // Remove user from local storage
+        localStorage.removeItem('user');
+
+        // Reload page to update state
+        window.location.reload();
+      }).catch((e) => console.log(e));
     },
     signIn: () => {
+      // Sign in with Google
       const auth = getAuth();
-      signInWithPopup(auth, provider)
-        .then(async (result) => {
-          const validatedUser = FirebaseUserScheme.parse(result.user);
-          localStorage.setItem("user", JSON.stringify(validatedUser));
-          window.location.reload();
-        }).catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          alert(errorCode + ": " + errorMessage);
-        });
+      signInWithPopup(auth, provider).then(async (result) => {
+        // Validate user
+        const validatedUser = FirebaseUserScheme.parse(result.user);
+
+        // Set user in local storage
+        localStorage.setItem("user", JSON.stringify(validatedUser));
+
+        // Reload page to update state
+        window.location.reload();
+      }).catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        alert(errorCode + ": " + errorMessage);
+      });
     }
   }
 }

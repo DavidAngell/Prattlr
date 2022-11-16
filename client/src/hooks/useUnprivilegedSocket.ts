@@ -30,13 +30,17 @@ export default function useUnprivilegedSocket(): UseUnprivilegedSocket {
 
     socket.on('message', (res: SocketResponse<Message>) => {
       try {
+        // Validate the response
         const validatedResponse = SocketResponseSchema.parse(res);
         if (res.error) throw new Error(validatedResponse.errorContent);
         
+        // Validate the message
         const validatedMessage = MessageScheme.parse(res.content);
 
+        // Add message to the messages array
         setMessages((messages) => [...messages, validatedMessage]);
 
+        // Add message to the correct array 
         if (validatedMessage.user.fromTwitch) {
           setTwitchMessages((twitchMessages) => [...twitchMessages, validatedMessage]);
         } else if (validatedMessage.user.fromYoutube) {
@@ -46,13 +50,13 @@ export default function useUnprivilegedSocket(): UseUnprivilegedSocket {
         }
 
         setIsLoading(false);
-  
       } catch (error) {
         console.log(error);
       }
     });
 
     return () => {
+      // Clean up the socket listeners on component unmount
       socket.off('connection established');
       socket.off('message');
     }

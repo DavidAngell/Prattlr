@@ -6,7 +6,6 @@ import styles from "./SignInButton.module.css"
 
 export default function SignInButton() {
   const { loggedIn, signOut, signIn } = useSignedIn();
-
   return <>
     {
       (loggedIn)
@@ -25,4 +24,3 @@ export default function SignInButton() {
     }
   </>
 }
-
