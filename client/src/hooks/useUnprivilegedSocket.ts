@@ -4,7 +4,6 @@ const socket = io(SOCKET_URL);
 
 import { useEffect, useState } from 'react';
 import { Message, SocketResponse, MessageScheme, SocketResponseSchema } from '../types';
-import { validateConfig } from 'astro/dist/core/config';
 
 export interface UseUnprivilegedSocket {
   messages: Message[];
@@ -31,22 +30,22 @@ export default function useUnprivilegedSocket(): UseUnprivilegedSocket {
     socket.on('message', (res: SocketResponse<Message>) => {
       try {
         // Validate the response
-        const validatedResponse = SocketResponseSchema.parse(res);
+        const validatedResponse: SocketResponse<Message> = SocketResponseSchema.parse(res);
         if (res.error) throw new Error(validatedResponse.errorContent);
         
         // Validate the message
-        const validatedMessage = MessageScheme.parse(res.content);
+        const validatedMessage: Message = MessageScheme.parse(res.content);
 
         // Add message to the messages array
-        setMessages((messages) => [...messages, validatedMessage]);
+        setMessages((messages): Message[] => [...messages, validatedMessage]);
 
         // Add message to the correct array 
         if (validatedMessage.user.fromTwitch) {
-          setTwitchMessages((twitchMessages) => [...twitchMessages, validatedMessage]);
+          setTwitchMessages((twitchMessages): Message[] => [...twitchMessages, validatedMessage]);
         } else if (validatedMessage.user.fromYoutube) {
-          setYoutubeMessages((youtubeMessages) => [...youtubeMessages, validatedMessage]);
+          setYoutubeMessages((youtubeMessages): Message[] => [...youtubeMessages, validatedMessage]);
         } else if (validatedMessage.user.fromPrattlr) {
-          setPrattlrMessages((prattlrMessages) => [...prattlrMessages, validatedMessage]);
+          setPrattlrMessages((prattlrMessages): Message[] => [...prattlrMessages, validatedMessage]);
         }
 
         setIsLoading(false);
@@ -57,8 +56,7 @@ export default function useUnprivilegedSocket(): UseUnprivilegedSocket {
 
     return () => {
       // Clean up the socket listeners on component unmount
-      socket.off('connection established');
-      socket.off('message');
+      socket.removeAllListeners();
     }
   }, [socket]);
 

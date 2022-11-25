@@ -1,7 +1,7 @@
-import { io } from 'socket.io-client'
 import { SOCKET_URL } from 'src/globals';
 import { useEffect, useState } from 'react';
 import { Message, SocketResponse, User, UserScheme } from '../types';
+import createSocket from 'src/utils/createSocket';
 
 export interface UseChatterSocket {
   success: boolean;
@@ -10,25 +10,34 @@ export interface UseChatterSocket {
 
 export default function useChatterSocket(user: User): UseChatterSocket {
   // Validate the user
-  const { success } = UserScheme.safeParse(user);
+  const { success: validUser } = UserScheme.safeParse(user);
 
   // Create the socket
   const [socket, setSocket] = useState<any>(null);
+  const [socketConnected, setSocketConnected] = useState(false);
 
   useEffect(() => {
     // Create the socket if the user is valid
-    if (success) {
-      // Initialize the socket
-      const socket = io(SOCKET_URL + '/chatter', {
-        auth: { accessToken: user.accessToken}
-      });
+    if (validUser) {
+      const socketResult = createSocket(
+        SOCKET_URL + '/chatter',
+        { accessToken: user.accessToken },
+        () => setSocketConnected(true),
+        (error: string) => setSocketConnected(false),
+      );
 
-      // Set the socket state to the initialized socket
-      setSocket(socket);
+      if (socketResult.ok) {
+        setSocket(socketResult.val);
+      }
+    }
+
+    return () => {
+      // Clean up the socket listeners on component unmount
+      if (socket) socket.removeAllListeners();
     }
   }, [user]);
 
-  if (success) {
+  if (socketConnected) {
     // Return the socket and the sendMessage function if the user is valid
     return {
       success: true,
@@ -47,11 +56,27 @@ export default function useChatterSocket(user: User): UseChatterSocket {
           });
       }
      };
-  } else {
-    // Return a default object if the user is not valid
-    return { 
-      success: false,
-      sendMessage: (message: string) => {},
-    };
+  }
+
+  return {
+    success: socketConnected,
+    sendMessage: (socketConnected)
+      ? (message: string) => {
+        socket.emit('chatter-message',
+          {
+            content: message,
+            user,
+            timestamp: new Date().toUTCString()
+          } as Message,
+          
+          (res: SocketResponse<any>) => {
+            if (res.error) {
+              console.log(res.errorContent);
+            }
+          }
+
+        );
+      }
+      : () => {},
   }
 }

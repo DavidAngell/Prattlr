@@ -1,7 +1,8 @@
 import { User, Message, SocketResponse, Server, UserScheme } from "../types";
 import { ChatClient } from '@twurple/chat';
+import { Firestore } from 'firebase-admin/firestore'
 
-export default async function startTwitchChat(io: Server, db: any, channelName: string) {
+export default async function startTwitchChat(io: Server, db: Firestore, channelName: string) {
   const liveChat = new ChatClient({ channels: [channelName] });
   await liveChat.connect();
   console.log("Connected to Twitch");
@@ -14,7 +15,7 @@ export default async function startTwitchChat(io: Server, db: any, channelName: 
         text
       })
 
-      const userObj = UserScheme.parse({
+      const userObj: User = UserScheme.parse({
           id: "twitch",
           accessToken: "twitch",
           name: user,

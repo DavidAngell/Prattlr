@@ -6,11 +6,9 @@ import { MenuItem, useMenuState, ControlledMenu } from '@szhsin/react-menu';
 interface MessageProps {
 	message: Message;
 	showTimestamps?: false;
-	setAnchorPoint: (point: { x: number, y: number }) => void;
-	toggleMenu: (state: boolean) => void;
 }
 
-export default function Message({ message, showTimestamps, setAnchorPoint, toggleMenu }: MessageProps) {
+export default function Message({ message, showTimestamps, }: MessageProps) {
 	const platformClass = (() => {
 		if (message.user.fromPrattlr) {
 			return "prattlr";
@@ -22,17 +20,12 @@ export default function Message({ message, showTimestamps, setAnchorPoint, toggl
 	})();
 
 	return <>
-		<div 
-			className={styles["message"]}
-			onContextMenu={e => {
-						e.preventDefault();
-						setAnchorPoint({ x: e.clientX, y: e.clientY });
-						toggleMenu(true);
-				}}
-			>
+		<div className={styles["message"]}>
 			{ message.user.fromPrattlr && <img src="/favicon.svg"></img>}
 			{/* { showTimestamps && <div className={styles["timestamp"]}>{message.timestamp}</div> } */}
-			<span className={`${styles["message-text"]} ${styles[platformClass]}`}>{message.user.name}:</span>
+			<a href={`/user/${message.user.id}`} className={`${styles["message-text"]} ${styles[platformClass]}`}>
+				<span className={`${styles["message-text"]} ${styles[platformClass]}`}>{message.user.name}:</span>
+			</a>
 			<span className={styles["message-text"]}>{message.content}</span>
 		</div>
 	</>
