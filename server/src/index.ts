@@ -19,7 +19,8 @@ const CHANNEL_LIST = {
 }
 
 // Initialize Socket.IO server
-const app = require('express')();
+import * as express from 'express';
+const app = express();
 import * as http from 'http';
 const server = http.createServer(app);
 
@@ -34,15 +35,16 @@ const io = new Server(server, {
 });
 
 // Initialize Firebase Admin
-const { initializeApp, cert } = require('firebase-admin/app');
-const { getFirestore } = require('firebase-admin/firestore');
-const { getAuth } = require('firebase-admin/auth');
+import { initializeApp, cert, ServiceAccount } from 'firebase-admin/app';
+import { getFirestore, Firestore } from 'firebase-admin/firestore'
+import { getAuth } from 'firebase-admin/auth';
+
 
 initializeApp({
-	credential: cert(FIREBASE_SERVICE_ACCOUNT),
+	credential: cert(FIREBASE_SERVICE_ACCOUNT as ServiceAccount),
 });
 
-const db = getFirestore();
+const db: Firestore = getFirestore();
 
 // Handle unprivledged users
 io.on('connection', (socket: any) => {
@@ -57,65 +59,72 @@ adminNamespace.use((socket, next) => {
   next();
 });
 
-// Create the moderator namespace
-const modNamespace = io.of("/mod");
-modNamespace.use(async (socket, next) => {
-  try {
-		// Ensure the user has a valid
-		const { accessToken } = socket.handshake.auth;
-		if (!accessToken) {
-			throw new Error("No access token provided");
-		}
+import { Ok, Result, Err } from 'ts-results';
+import { Socket } from 'socket.io';
+import { DecodedIdToken } from 'firebase-admin/auth';
+async function decodeToken(accessToken: string): Promise<Result<DecodedIdToken, string>> {
+	const auth = getAuth();
+	try {
+		const decodedToken = await auth.verifyIdToken(accessToken);
+		return Ok(decodedToken);
+	} catch (error) {
+		return Err(error);
+	}
+}
+async function validateSocket(socket: Socket, checkMod: boolean): Promise<Result<Socket, string>> {
+	// Check if the socket has a token
+	const { accessToken } = socket.handshake.auth;
+	if (!accessToken) {
+		Err("No access token provided");
+	}
 
-		// Ensure the user exists in the database
-		const decodedToken = await getAuth().verifyIdToken(accessToken);
-		if (!decodedToken) {
-			throw new Error("User does not exist");
-		}
+	// Ensure the user exists in the database
+	const decodedToken = await decodeToken(accessToken);
+	if (!decodedToken.ok) {
+		return Err("Invalid access token");
+	}
 
-		// Ensure the user is a moderator
-		const userRef = db.collection("prattlr-users").doc(decodedToken.uid);
+	// Check if the user is a mod if needed
+	if (checkMod) {
+		const userRef = db.collection("prattlr-users").doc(decodedToken.val.uid);
 		const doc = await userRef.get();
 		const docExists = doc.exists;
 
 		if (!docExists) {
-			throw new Error("User does not exist");
+			Err("User does not exist");
 		} else {
 			const userData = doc.data();
 			if (!userData.isMod) {
-				throw new Error("User is not a moderator");
+				Err("User is not a moderator");
 			}
 		}
-
-		next();
-	} catch (error) {
-		console.log(error);
-		next(new Error(error));
 	}
-  next();
+
+	return Ok(socket);
+}
+
+// Create the moderator namespace
+const modNamespace = io.of("/mod");
+modNamespace.use(async (socket, next) => {
+	const result = await validateSocket(socket, true);
+	if (result.err) {
+		console.log(result.val);
+		next(new Error(result.val));
+	} else {
+		next();
+	}
 });
 
 
 // Create the chatter namespace
 const chatterNamespace = io.of("/chatter");
 chatterNamespace.use(async (socket, next) => {
-	try {
-		// Ensure the user has a valid
-		const { accessToken } = socket.handshake.auth;
-		if (!accessToken) {
-			throw new Error("No access token provided");
-		}
-
-		// Ensure the user exists in the database
-		const authToken = await getAuth().verifyIdToken(accessToken);
-		if (!authToken) {
-			throw new Error("User does not exist");
-		}
-
+	const result = await validateSocket(socket, false);
+	if (result.err) {
+		console.log(result.val);
+		next(new Error(result.val));
+	} else {
 		next();
-	} catch (error) {
-		console.log(error);
-		next(new Error(error));
 	}
 });
 

@@ -1,12 +1,13 @@
 import { LiveChat } from "youtube-chat";
 import { MessageItem, EmojiItem } from 'youtube-chat/dist/types/data';
 import { UserScheme, MessageScheme, Message, SocketResponse, Server } from "../types";
+import { Firestore } from 'firebase-admin/firestore'
 
 function isEmojiItem(item: MessageItem): item is EmojiItem {
 	return (item as EmojiItem).emojiText !== undefined;
 }
 
-export default function startYouTubeChat(io: Server, db: any, chatId: string) {
+export default function startYouTubeChat(io: Server, db: Firestore, chatId: string) {
   const liveChat = new LiveChat({ channelId: chatId })
   liveChat.on("start", (liveId) => console.log("Live chat started: ", liveId))
   liveChat.on("error", (err) => console.error(err))

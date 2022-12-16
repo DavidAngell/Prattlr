@@ -1,7 +1,8 @@
 import { Socket, SocketResponse, Message, MessageScheme } from "../types";
-const { getAuth } = require('firebase-admin/auth');
+import { getAuth } from "firebase-admin/auth";
+import { Firestore } from 'firebase-admin/firestore'
 
-export default function chatterHandler(socket: Socket, io: any, db: any) {
+export default function chatterHandler(socket: Socket, io: any, db: Firestore) {
   socket.emit("connection established");
   socket.join("chatter");
 

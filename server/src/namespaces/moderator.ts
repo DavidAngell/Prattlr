@@ -1,5 +1,6 @@
 import { Socket, SocketResponse, Message, MessageScheme } from "../types";
-const { getAuth } = require('firebase-admin/auth');
+import { getAuth } from "firebase-admin/auth";
+import { Firestore } from 'firebase-admin/firestore'
 
 interface ValidateUser {
   isValid: boolean;
@@ -8,7 +9,7 @@ interface ValidateUser {
   doc?: any;
 }
 
-async function validateUser(socket: Socket, db: any): Promise<ValidateUser> {
+async function validateUser(socket: Socket, db: Firestore): Promise<ValidateUser> {
   try {
     // Ensure the user has a valid
     const { accessToken } = socket.handshake.auth;
@@ -49,7 +50,7 @@ async function validateUser(socket: Socket, db: any): Promise<ValidateUser> {
   }
 }
 
-export default function modHandler(socket: Socket, io: any, db: any) {
+export default function modHandler(socket: Socket, io: any, db: Firestore) {
   socket.emit("connection established");
   socket.join("moderator");
 

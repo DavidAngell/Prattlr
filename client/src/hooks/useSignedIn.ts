@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { User, FirebaseUserScheme } from 'src/types';
+import { User, FirebaseUserScheme, FirebaseUser } from 'src/types';
 
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
@@ -35,7 +35,7 @@ export default function useSignedIn(): UseSignedIn {
         if (!storedUser) return;
 
         // Validate user
-        const validatedUser = FirebaseUserScheme.parse(storedUser);
+        const validatedUser: FirebaseUser = FirebaseUserScheme.parse(storedUser);
 
         // Set user if valid
         setUser({
@@ -73,7 +73,7 @@ export default function useSignedIn(): UseSignedIn {
       const auth = getAuth();
       signInWithPopup(auth, provider).then(async (result) => {
         // Validate user
-        const validatedUser = FirebaseUserScheme.parse(result.user);
+        const validatedUser: FirebaseUser = FirebaseUserScheme.parse(result.user);
 
         // Set user in local storage
         localStorage.setItem("user", JSON.stringify(validatedUser));
