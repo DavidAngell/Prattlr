@@ -15,7 +15,7 @@ export default async function startTwitchChat(io: Server, db: any, channelName: 
       })
 
       const userObj = UserScheme.parse({
-          id: "twitch",
+          id: user,
           accessToken: "twitch",
           name: user,
           pfp: "https://twitch.tv/favicon.ico",
