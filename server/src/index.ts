@@ -1,8 +1,6 @@
-import adminHandler from './namespaces/admin';
-import chatterHandler from './namespaces/chatter';
-import modHandler from './namespaces/moderator';
-import startYouTubeChat from './external-chats/youtube';
-import startTwitchChat from './external-chats/twitch';
+import { adminHandler, modHandler, chatterHandler } from './namespaces/namespaces';
+import { startTwitchChat, startYouTubeChat } from './external-chats/externalChats';
+import { validateSocket } from './validation/validators';
 import { v4 as uuidv4 } from 'uuid';
 import {  
 	FIREBASE_SERVICE_ACCOUNT 
@@ -37,8 +35,6 @@ const io = new Server(server, {
 // Initialize Firebase Admin
 import { initializeApp, cert, ServiceAccount } from 'firebase-admin/app';
 import { getFirestore, Firestore } from 'firebase-admin/firestore'
-import { getAuth } from 'firebase-admin/auth';
-
 
 initializeApp({
 	credential: cert(FIREBASE_SERVICE_ACCOUNT as ServiceAccount),
@@ -59,54 +55,11 @@ adminNamespace.use((socket, next) => {
   next();
 });
 
-import { Ok, Result, Err } from 'ts-results';
-import { Socket } from 'socket.io';
-import { DecodedIdToken } from 'firebase-admin/auth';
-async function decodeToken(accessToken: string): Promise<Result<DecodedIdToken, string>> {
-	const auth = getAuth();
-	try {
-		const decodedToken = await auth.verifyIdToken(accessToken);
-		return Ok(decodedToken);
-	} catch (error) {
-		return Err(error);
-	}
-}
-async function validateSocket(socket: Socket, checkMod: boolean): Promise<Result<Socket, string>> {
-	// Check if the socket has a token
-	const { accessToken } = socket.handshake.auth;
-	if (!accessToken) {
-		Err("No access token provided");
-	}
-
-	// Ensure the user exists in the database
-	const decodedToken = await decodeToken(accessToken);
-	if (!decodedToken.ok) {
-		return Err("Invalid access token");
-	}
-
-	// Check if the user is a mod if needed
-	if (checkMod) {
-		const userRef = db.collection("prattlr-users").doc(decodedToken.val.uid);
-		const doc = await userRef.get();
-		const docExists = doc.exists;
-
-		if (!docExists) {
-			Err("User does not exist");
-		} else {
-			const userData = doc.data();
-			if (!userData.isMod) {
-				Err("User is not a moderator");
-			}
-		}
-	}
-
-	return Ok(socket);
-}
 
 // Create the moderator namespace
 const modNamespace = io.of("/mod");
 modNamespace.use(async (socket, next) => {
-	const result = await validateSocket(socket, true);
+	const result = await validateSocket(db, socket, true);
 	if (result.err) {
 		console.log(result.val);
 		next(new Error(result.val));
@@ -119,7 +72,7 @@ modNamespace.use(async (socket, next) => {
 // Create the chatter namespace
 const chatterNamespace = io.of("/chatter");
 chatterNamespace.use(async (socket, next) => {
-	const result = await validateSocket(socket, false);
+	const result = await validateSocket(db, socket, false);
 	if (result.err) {
 		console.log(result.val);
 		next(new Error(result.val));
@@ -148,4 +101,4 @@ CHANNEL_LIST.twitch.forEach((channelId: string) => {
 });
 
 // Start the server
-server.listen(port, () => console.log(`API listening at http://localhost:${port}`));
+server.listen(port, () => console.log(`Socket listening at http://localhost:${port}`));

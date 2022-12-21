@@ -19,11 +19,13 @@ export default function Message({ message, showTimestamps, }: MessageProps) {
 		}
 	})();
 
+	const userPage = `/user/${platformClass}/${platformClass === "twitch" ? message.user.name : message.user.id}`;
+
 	return <>
 		<div className={styles["message"]}>
 			{ message.user.fromPrattlr && <img src="/favicon.svg"></img>}
 			{/* { showTimestamps && <div className={styles["timestamp"]}>{message.timestamp}</div> } */}
-			<a href={`/user/${message.user.id}`} className={`${styles["message-text"]} ${styles[platformClass]}`}>
+			<a href={userPage} className={`${styles["message-text"]} ${styles[platformClass]}`}>
 				<span className={`${styles["message-text"]} ${styles[platformClass]}`}>{message.user.name}:</span>
 			</a>
 			<span className={styles["message-text"]}>{message.content}</span>

@@ -1,0 +1,11 @@
+---
+import Layout from "@layouts/Layout.astro";
+const userId = Astro.url.pathname.split("/").at(-1);
+
+---
+
+<Layout title="Chat">
+	<main>
+		<p>Chat with {userId}</p>
+	</main>
+</Layout>
